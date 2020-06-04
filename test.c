@@ -37,7 +37,40 @@ struct SceneDetail scene_detail_list[] =
 	{ {-1, 0}, "This is west of starting point", WEST_WALL|NORTH_WALL|SOUTH_WALL }
 };
 
+enum ItemType {
+	ITEM_NOTHING = 0,
+	ITEM_SWORD,
+	ITEM_SHIELD
+};
+
+struct ItemDetail
+{
+	struct Location location;
+	const char *short_details;
+	const char *long_details;
+	enum ItemType item_type;
+};
+
+struct ItemDetail item_detail_list[] = 
+{
+	{ {0, 0}, "Broad sword", "This is a cast iron broad sword", ITEM_SWORD },
+	{ {0, 0}, "Wooden shield", "This is a worn wooden shield", ITEM_SHIELD },
+	{ {0, 1}, "Short sword", "This is a cast iron short sword", ITEM_SWORD }
+};
+
+
 struct Location current_location = {0, 0};
+
+void print_items_at_current_location()
+{
+	int i;
+
+	for (i = 0; i < sizeof(item_detail_list) / sizeof(struct ItemDetail); i++) {
+		if ((item_detail_list[i].location.x == current_location.x) && (item_detail_list[i].location.y == current_location.y)) {
+			printf("Item: %s \"%s\"\n", item_detail_list[i].short_details, item_detail_list[i].long_details);
+		}
+	}
+}
 
 int get_scene_detail(int x, int y)
 {
@@ -122,6 +155,8 @@ void print_current_scene()
 	if (i >= 0) {
 		printf("%s\n", scene_detail_list[i].details);
 	}
+
+	print_items_at_current_location();
 
 	printf("Where do you want to go? <n,s,e,w> ");
 }
