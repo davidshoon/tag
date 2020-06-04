@@ -43,6 +43,8 @@ int get_scene_detail(int x, int y)
 {
 	int i;
 
+	/* This is abit slow if there's a huge map, since it goes through each element - O(n) time - would be faster with a hash_map or something similar. */
+
 	for (i = 0; i < sizeof(scene_detail_list) / sizeof(struct SceneDetail); i++) {
 		if ((scene_detail_list[i].location.x == current_location.x) && (scene_detail_list[i].location.y == current_location.y)) {
 			return i;
@@ -56,7 +58,7 @@ void go_north()
 {
 	int i = get_scene_detail(current_location.x, current_location.y);
 
-	if (i != -1) {
+	if (i >= 0) {
 		if (scene_detail_list[i].wall_type & NORTH_WALL) {
 			printf("Can't go north!\n");
 			return;
@@ -70,7 +72,7 @@ void go_south()
 {
 	int i = get_scene_detail(current_location.x, current_location.y);
 
-	if (i != -1) {
+	if (i >= 0) {
 		if (scene_detail_list[i].wall_type & SOUTH_WALL) {
 			printf("Can't go south!\n");
 			return;
@@ -84,7 +86,7 @@ void go_east()
 {
 	int i = get_scene_detail(current_location.x, current_location.y);
 
-	if (i != -1) {
+	if (i >= 0) {
 		if (scene_detail_list[i].wall_type & EAST_WALL) {
 			printf("Can't go east!\n");
 			return;
@@ -98,7 +100,7 @@ void go_west()
 {
 	int i = get_scene_detail(current_location.x, current_location.y);
 
-	if (i != -1) {
+	if (i >= 0) {
 		if (scene_detail_list[i].wall_type & WEST_WALL) {
 			printf("Can't go west!\n");
 			return;
@@ -117,7 +119,7 @@ void print_current_scene()
 
 	i = get_scene_detail(current_location.x, current_location.y);
 
-	if (i != -1) {
+	if (i >= 0) {
 		printf("%s\n", scene_detail_list[i].details);
 	}
 
